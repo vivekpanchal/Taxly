@@ -3,31 +3,64 @@
 @tailwind utilities;
 
 :root {
-  --font-geist-sans: 'Geist', system-ui, sans-serif;
-  --font-geist-mono: 'Geist Mono', monospace;
+  --brand: #0B6E4F;
+  --brand-soft: #E6F2EC;
+  --brand-ink: #063D2C;
+  --accent: #D4FF4F;
+  --ink: #0F1410;
+  --ink-mid: rgba(15,20,16,0.62);
+  --ink-soft: rgba(15,20,16,0.42);
+  --bg: #F7F7F4;
+  --surface: #FFFFFF;
+  --surface-alt: #F0F0EC;
+  --line: rgba(15,20,16,0.08);
+  --line-strong: rgba(15,20,16,0.14);
+  --danger: #C5341B;
+  --danger-soft: #FBE9E5;
+  --warn: #B7791F;
+  --warn-soft: #FBF1DD;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; font-family: var(--font-geist-sans); -webkit-font-smoothing: antialiased; }
 
-@keyframes taxlyFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes taxlyBlink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-@keyframes taxlySlideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-@keyframes taxlyPop {
-  from { transform: scale(0.4); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
-/* Range input cross-browser styling */
+/* Smooth number font */
+.mono { font-family: 'Geist Mono', 'Courier New', monospace; font-variant-numeric: tabular-nums; }
+
+/* Inputs */
+input[type='text'],
+input[type='number'] {
+  font-family: 'Geist Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
 input[type='range'] { -webkit-appearance: none; appearance: none; }
 input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; width: 0; height: 0; }
 input[type='range']::-moz-range-thumb { width: 0; height: 0; border: none; background: transparent; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 0.3s ease forwards; }
+
+/* Responsive: collapse to single column on narrow screens */
+@media (max-width: 768px) {
+  .calc-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .results-sticky {
+    position: static !important;
+  }
+}

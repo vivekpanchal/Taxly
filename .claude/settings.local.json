@@ -10,7 +10,9 @@
       "Bash(cp -r \"E:\\\\PersonalProjects\\\\Taxly\\\\frontend\\\\hooks\" \"E:\\\\PersonalProjects\\\\Taxly\\\\hooks\")",
       "Bash(cp -r \"E:\\\\PersonalProjects\\\\Taxly\\\\frontend\\\\lib\" \"E:\\\\PersonalProjects\\\\Taxly\\\\lib\")",
       "Bash(npx tsc *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "WebSearch",
+      "Bash(git add *)"
     ]
   }
 }
