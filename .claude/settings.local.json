@@ -12,7 +12,10 @@
       "Bash(npx tsc *)",
       "Bash(npm run *)",
       "WebSearch",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "WebFetch(domain:www.policybazaar.com)",
+      "WebFetch(domain:masllp.com)",
+      "WebFetch(domain:finlecture.in)"
     ]
   }
 }
