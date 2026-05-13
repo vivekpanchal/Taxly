@@ -1,0 +1,33 @@
+Business Source License 1.1
+
+Licensor:             Vivek Panchal
+Licensed Work:        Taxly — Tax, finally on your side
+                      Copyright (c) 2026 Vivek Panchal
+Additional Use Grant: None
+Change Date:          2029-01-01
+Change License:       MIT License
+
+Use Limitation: Production use, commercial use, or redistribution of the
+Licensed Work or any derivative works requires explicit written permission
+from the Licensor.
+
+You may view, fork, and run the Licensed Work for personal evaluation and
+non-commercial learning purposes only.
+
+For permissions, licensing inquiries, or commercial use:
+  vivekpanchal64@gmail.com
+
+-----------------------------------------------------------------------------
+
+Business Source License 1.1 — Parameters
+
+"Licensed Work" means the software, code, documentation, and related files
+in this repository.
+
+"Production use" means deploying the Licensed Work or its derivatives to
+serve end users in any environment beyond local development.
+
+On the Change Date, the Licensed Work will be made available under the
+Change License (MIT License) with no additional restrictions.
+
+Full license text: https://mariadb.com/bsl11/
