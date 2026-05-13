@@ -109,11 +109,14 @@ export function TaxCalculator() {
   const handleDownloadPDF = async () => {
     if (!result) return;
     setPdfLoading(true);
+    setError(null);
     try {
       const { downloadSavingsPlan } = await import('@/components/SavingsPlanPDF');
       await downloadSavingsPlan(result, formToInput(form));
-    } catch (e) {
-      console.error('PDF generation failed:', e);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('[PDF] generation failed:', e);
+      setError(`PDF generation failed: ${msg}. Open browser console for details.`);
     } finally {
       setPdfLoading(false);
     }
@@ -349,6 +352,12 @@ export function TaxCalculator() {
                 {pdfLoading ? <><Spinner />Generating…</> : <>📄 Download PDF</>}
               </button>
             </div>
+
+            {error && (
+              <div style={{ padding: '12px 16px', background: 'var(--danger-soft)', borderRadius: 10, color: 'var(--danger)', fontSize: 13, border: '1px solid var(--danger)' }}>
+                ⚠️ {error}
+              </div>
+            )}
 
             <button onClick={handleReset}
               style={{ height: 44, borderRadius: 10, background: 'transparent', border: '1px solid var(--line)', color: 'var(--ink-mid)', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>

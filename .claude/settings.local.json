@@ -15,7 +15,8 @@
       "Bash(git add *)",
       "WebFetch(domain:www.policybazaar.com)",
       "WebFetch(domain:masllp.com)",
-      "WebFetch(domain:finlecture.in)"
+      "WebFetch(domain:finlecture.in)",
+      "Bash(node -e \"const p = require\\('@react-pdf/renderer'\\); console.log\\(Object.keys\\(p\\).filter\\(k => k === 'pdf' || k === 'PDFRenderer'\\)\\)\")"
     ]
   }
 }
