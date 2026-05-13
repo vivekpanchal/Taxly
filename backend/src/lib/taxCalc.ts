@@ -40,6 +40,19 @@ export interface UserInput {
   otherIncome: number;
 }
 
+export interface DeductionBreakdown {
+  standardDed: number;
+  hraExempt: number;
+  sec80C: number;
+  sec80D: number;
+  sec80CCD1B: number;
+  homeLoanInterest: number;
+  sec80TTA_TTB: number;
+  sec80E: number;
+  sec80G: number;
+  professional: number;
+}
+
 export interface RegimeResult {
   gross: number;
   taxable: number;
@@ -51,6 +64,7 @@ export interface RegimeResult {
   tax: number;
   hraExempt: number;
   marginalRelief87A: number;
+  deductionsUsed: DeductionBreakdown;
 }
 
 export interface SlabDef { upto: number; rate: number; label: string; }
@@ -157,7 +171,7 @@ export function calcOldRegime(u: UserInput): RegimeResult {
   const taxWithSurcharge = taxAfterRebate + surcharge.amount - surcharge.marginalRelief;
   const cess = Math.max(0, taxWithSurcharge) * 0.04;
 
-  return { gross, taxable, baseTax, rebate, taxAfterRebate, surcharge, cess, tax: Math.max(0, taxWithSurcharge) + cess, hraExempt, marginalRelief87A: relief87A };
+  return { gross, taxable, baseTax, rebate, taxAfterRebate, surcharge, cess, tax: Math.max(0, taxWithSurcharge) + cess, hraExempt, marginalRelief87A: relief87A, deductionsUsed: { standardDed: u.salary.standardDed, hraExempt, sec80C: ded80C, sec80D: ded80D + ded80D_par, sec80CCD1B: ded80CCD, homeLoanInterest: ded24b, sec80TTA_TTB: dedTTA_TTB, sec80E: u.sec80E, sec80G: u.sec80G, professional: u.salary.professional } };
 }
 
 export function calcNewRegime(u: UserInput): RegimeResult {
@@ -171,7 +185,7 @@ export function calcNewRegime(u: UserInput): RegimeResult {
   const taxWithSurcharge = taxAfterRebate + surcharge.amount - surcharge.marginalRelief;
   const cess = Math.max(0, taxWithSurcharge) * 0.04;
 
-  return { gross, taxable, baseTax, rebate, taxAfterRebate, surcharge, cess, tax: Math.max(0, taxWithSurcharge) + cess, hraExempt: 0, marginalRelief87A: relief87A };
+  return { gross, taxable, baseTax, rebate, taxAfterRebate, surcharge, cess, tax: Math.max(0, taxWithSurcharge) + cess, hraExempt: 0, marginalRelief87A: relief87A, deductionsUsed: { standardDed: u.salary.standardDed, hraExempt: 0, sec80C: 0, sec80D: 0, sec80CCD1B: 0, homeLoanInterest: 0, sec80TTA_TTB: 0, sec80E: 0, sec80G: 0, professional: 0 } };
 }
 
 export function sliceBySlabs(taxable: number, slabs: SlabDef[]) {
@@ -184,4 +198,44 @@ export function sliceBySlabs(taxable: number, slabs: SlabDef[]) {
     if (rem <= 0) break;
   }
   return out;
+}
+
+// ── Deduction gap analysis ────────────────────────────────────────────────────
+
+export interface DeductionGap {
+  code: string;
+  newCode: string;
+  name: string;
+  description: string;
+  maxLimit: number;
+  used: number;
+  gap: number;
+  taxSaved: number;
+}
+
+export const SECTION_MAP: Record<string, string> = {
+  '80C': '123', '80CCD(1B)': '124', '80CCD(2)': '125', '80D': '126',
+  '80E': '129', '24(b)': '72', '87A': '191', '80TTA': '128', '80TTB': '128', '10(13A)': '18',
+};
+
+export function calcDeductionGaps(u: UserInput, oldResult: RegimeResult): DeductionGap[] {
+  const bracket = 0.30 * 1.04;
+  const ded80CUsed = Math.min(150000, u.sec80C + u.salary.pf);
+  const ded80DMax  = u.age === 'below60' ? 25000 : 50000;
+  const ded80D_parMax = u.age !== 'below60' ? 50000 : 25000;
+  const ttaMax = u.age === 'below60' ? 10000 : 0;
+  const ttbMax = u.age !== 'below60' ? 50000 : 0;
+
+  const items: DeductionGap[] = [
+    { code: '80C',       newCode: '123', name: 'Tax-saving investments',   description: 'ELSS, PPF, LIC, NSC, 5-yr FD, tuition fees', maxLimit: 150000, used: ded80CUsed, gap: Math.max(0, 150000 - ded80CUsed), taxSaved: Math.max(0, 150000 - ded80CUsed) * bracket },
+    { code: '80CCD(1B)', newCode: '124', name: 'NPS extra ₹50K',           description: 'National Pension System Tier-1, over 80C', maxLimit: 50000, used: Math.min(50000, u.sec80CCD1B), gap: Math.max(0, 50000 - u.sec80CCD1B), taxSaved: Math.max(0, 50000 - u.sec80CCD1B) * bracket },
+    { code: '80D',       newCode: '126', name: `Health insurance (self)`,  description: `Mediclaim — self+family, max ₹${ded80DMax/1000}K`, maxLimit: ded80DMax, used: Math.min(ded80DMax, u.sec80D), gap: Math.max(0, ded80DMax - u.sec80D), taxSaved: Math.max(0, ded80DMax - u.sec80D) * bracket },
+    { code: '80D (parents)', newCode: '126', name: 'Health insurance (parents)', description: 'Parents mediclaim', maxLimit: ded80D_parMax, used: Math.min(ded80D_parMax, u.sec80D_parents), gap: Math.max(0, ded80D_parMax - u.sec80D_parents), taxSaved: Math.max(0, ded80D_parMax - u.sec80D_parents) * bracket },
+    ...(u.salary.hra > 0 ? [{ code: 'HRA', newCode: '18', name: 'House Rent Allowance', description: 'Rent receipts required', maxLimit: u.salary.hra, used: oldResult.hraExempt, gap: Math.max(0, u.salary.hra - oldResult.hraExempt), taxSaved: Math.max(0, u.salary.hra - oldResult.hraExempt) * bracket }] : []),
+    { code: '24(b)', newCode: '72', name: 'Home loan interest', description: 'Self-occupied, max ₹2L/yr', maxLimit: 200000, used: Math.min(200000, u.homeLoanInterest), gap: Math.max(0, 200000 - u.homeLoanInterest), taxSaved: Math.max(0, 200000 - u.homeLoanInterest) * bracket },
+    ...(ttaMax > 0 ? [{ code: '80TTA', newCode: '128', name: 'Savings interest',        description: 'Bank savings a/c, max ₹10K', maxLimit: ttaMax, used: Math.min(ttaMax, u.sec80TTA), gap: Math.max(0, ttaMax - u.sec80TTA), taxSaved: Math.max(0, ttaMax - u.sec80TTA) * bracket }] : []),
+    ...(ttbMax > 0 ? [{ code: '80TTB', newCode: '128', name: 'Savings + FD interest',  description: 'Senior citizen, max ₹50K', maxLimit: ttbMax, used: Math.min(ttbMax, u.sec80TTB), gap: Math.max(0, ttbMax - u.sec80TTB), taxSaved: Math.max(0, ttbMax - u.sec80TTB) * bracket }] : []),
+  ].filter(d => d.maxLimit > 0 && d.gap > 0);
+
+  return items;
 }
