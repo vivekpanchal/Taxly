@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(python -c ' *)",
+      "Bash(git -C \"E:\\\\PersonalProjects\\\\Taxly\" log --oneline -5)",
+      "Bash(npm install *)",
+      "Bash(cp -r \"E:\\\\PersonalProjects\\\\Taxly\\\\frontend\\\\app\" \"E:\\\\PersonalProjects\\\\Taxly\\\\app\")",
+      "Bash(cp -r \"E:\\\\PersonalProjects\\\\Taxly\\\\frontend\\\\components\" \"E:\\\\PersonalProjects\\\\Taxly\\\\components\")",
+      "Bash(cp -r \"E:\\\\PersonalProjects\\\\Taxly\\\\frontend\\\\hooks\" \"E:\\\\PersonalProjects\\\\Taxly\\\\hooks\")",
+      "Bash(cp -r \"E:\\\\PersonalProjects\\\\Taxly\\\\frontend\\\\lib\" \"E:\\\\PersonalProjects\\\\Taxly\\\\lib\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
