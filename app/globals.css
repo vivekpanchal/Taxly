@@ -55,12 +55,58 @@ input[type='range']::-moz-range-thumb { width: 0; height: 0; border: none; backg
 
 .fade-up { animation: fadeUp 0.3s ease forwards; }
 
-/* Responsive: collapse to single column on narrow screens */
+/* ── Responsive layout ───────────────────────────────────────────────────── */
+
+/* Main form + preview sidebar → stack on mobile */
 @media (max-width: 768px) {
   .calc-layout {
     grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  .calc-preview-col {
+    display: none !important;
   }
   .results-sticky {
     position: static !important;
+  }
+}
+
+/* Two-column field rows, results grid, PDF panel → collapse */
+@media (max-width: 600px) {
+  .two-col {
+    grid-template-columns: 1fr !important;
+  }
+  .results-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .pdf-panel {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .pdf-panel-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .winner-metrics {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 6px !important;
+  }
+  .winner-metrics-sep {
+    display: none !important;
+  }
+  .winner-metric-val {
+    font-size: 18px !important;
+  }
+  .navbar-hint {
+    display: none !important;
+  }
+  .page-body {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-bottom: 48px !important;
+  }
+  .hero-block {
+    padding: 20px 16px 24px !important;
   }
 }

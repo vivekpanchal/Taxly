@@ -131,7 +131,7 @@ export function TaxCalculator() {
           <Logo />
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Badge label="FY 2025-26" />
-            <span style={{ fontSize: 11, color: 'var(--ink-soft)' }}>IT Act 2025 · Budget 2026: no slab changes</span>
+            <span className="navbar-hint" style={{ fontSize: 11, color: 'var(--ink-soft)' }}>IT Act 2025 · Budget 2026: no slab changes</span>
             {result && (
               <button onClick={handleReset} style={{ marginLeft: 8, fontSize: 12, color: 'var(--brand)', background: 'transparent', border: '1px solid var(--brand)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontWeight: 600 }}>
                 ← Edit inputs
@@ -142,7 +142,7 @@ export function TaxCalculator() {
       </nav>
 
       {/* HERO */}
-      <div style={{ background: 'var(--brand)', padding: '32px 24px 36px' }}>
+      <div className="hero-block" style={{ background: 'var(--brand)', padding: '32px 24px 36px' }}>
         <div style={{ maxWidth: 1160, margin: '0 auto' }}>
           <h1 style={{ margin: 0, color: '#fff', fontSize: 'clamp(24px, 3vw, 40px)', fontWeight: 700, letterSpacing: -0.8, lineHeight: 1.15 }}>
             {result ? 'Your Tax Verdict' : 'Old vs New regime — which one saves you more?'}
@@ -153,10 +153,10 @@ export function TaxCalculator() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '28px 24px 80px' }}>
+      <div className="page-body" style={{ maxWidth: 1160, margin: '0 auto', padding: '28px 24px 80px' }}>
         {!result ? (
           /* ═══ FORM ════════════════════════════════════════════════════ */
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,360px)', gap: 28, alignItems: 'start' }}>
+          <div className="calc-layout" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,360px)', gap: 28, alignItems: 'start' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 
               {/* STEP 1 */}
@@ -303,7 +303,7 @@ export function TaxCalculator() {
             </div>
 
             {/* Right column — preview hints */}
-            <div style={{ position: 'sticky', top: 68 }}>
+            <div className="calc-preview-col results-sticky" style={{ position: 'sticky', top: 68 }}>
               <div style={{ padding: 24, background: 'var(--surface)', borderRadius: 16, border: '1px solid var(--line)', textAlign: 'center' }}>
                 <div style={{ fontSize: 36, marginBottom: 12 }}>📊</div>
                 <div style={{ fontSize: 15, fontWeight: 600, letterSpacing: -0.3 }}>Your verdict appears here</div>
@@ -330,7 +330,7 @@ export function TaxCalculator() {
               /* ── FULL RESULTS ── */
               <>
                 <WinnerCard result={result} />
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div className="results-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <RegimeTable result={result} />
                   <BreakdownCard result={result} />
                 </div>
@@ -340,14 +340,14 @@ export function TaxCalculator() {
             )}
 
             {/* PDF BUTTON */}
-            <div style={{ marginTop: 8, padding: '20px 24px', background: 'var(--surface)', borderRadius: 16, border: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+            <div className="pdf-panel" style={{ marginTop: 8, padding: '20px 24px', background: 'var(--surface)', borderRadius: 16, border: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', letterSpacing: -0.3 }}>Generate Savings Plan PDF</div>
                 <div style={{ fontSize: 12, color: 'var(--ink-mid)', marginTop: 3, lineHeight: 1.5 }}>
                   Personalised report with your tax breakdown, best regime verdict, and ranked action items to maximise savings.
                 </div>
               </div>
-              <button onClick={handleDownloadPDF} disabled={pdfLoading}
+              <button onClick={handleDownloadPDF} disabled={pdfLoading} className="pdf-panel-btn"
                 style={{ flexShrink: 0, height: 48, padding: '0 24px', borderRadius: 12, background: pdfLoading ? 'var(--surface-alt)' : 'var(--brand)', color: pdfLoading ? 'var(--ink-soft)' : '#fff', border: 0, fontSize: 14, fontWeight: 700, cursor: pdfLoading ? 'default' : 'pointer', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'inherit', boxShadow: pdfLoading ? 'none' : '0 4px 14px rgba(11,110,79,0.3)' }}>
                 {pdfLoading ? <><Spinner />Generating…</> : <>📄 Download PDF</>}
               </button>
@@ -425,7 +425,7 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 function TwoCol({ children }: { children: React.ReactNode }) {
-  return <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>{children}</div>;
+  return <div className="two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>{children}</div>;
 }
 
 function FieldWrap({ label, hint, required, children }: { label: string; hint?: string; required?: boolean; children: React.ReactNode }) {
@@ -531,22 +531,22 @@ function WinnerCard({ result }: { result: CalculateResult }) {
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: 'rgba(255,255,255,.55)' }}>Recommended for you</div>
         <div style={{ fontSize: 36, fontWeight: 700, letterSpacing: -0.8, marginTop: 2, lineHeight: 1.1 }}>✓ {label}</div>
         <div style={{ fontSize: 12, color: 'rgba(255,255,255,.65)', marginTop: 5, lineHeight: 1.55 }}>{reason}</div>
-        <div style={{ marginTop: 18, display: 'grid', gridTemplateColumns: '1fr 1px 1fr 1px 1fr', gap: 14, alignItems: 'center' }}>
+        <div className="winner-metrics" style={{ marginTop: 18, display: 'grid', gridTemplateColumns: '1fr 1px 1fr 1px 1fr', gap: 14, alignItems: 'center' }}>
           <div>
             <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>Save vs other</div>
-            <div style={{ fontFamily: 'Geist Mono,monospace', fontSize: 24, fontWeight: 700, color: '#D4FF4F', marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>{fmtINR(savings)}</div>
+            <div className="winner-metric-val" style={{ fontFamily: 'Geist Mono,monospace', fontSize: 24, fontWeight: 700, color: '#D4FF4F', marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>{fmtINR(savings)}</div>
             <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginTop: 2 }}>per year</div>
           </div>
-          <div style={{ background: 'rgba(255,255,255,.12)', height: 36 }} />
+          <div className="winner-metrics-sep" style={{ background: 'rgba(255,255,255,.12)', height: 36 }} />
           <div>
             <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>Extra/month</div>
-            <div style={{ fontFamily: 'Geist Mono,monospace', fontSize: 24, fontWeight: 700, marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>{fmtINR(monthlyDelta)}</div>
+            <div className="winner-metric-val" style={{ fontFamily: 'Geist Mono,monospace', fontSize: 24, fontWeight: 700, marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>{fmtINR(monthlyDelta)}</div>
             <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginTop: 2 }}>in hand</div>
           </div>
-          <div style={{ background: 'rgba(255,255,255,.12)', height: 36 }} />
+          <div className="winner-metrics-sep" style={{ background: 'rgba(255,255,255,.12)', height: 36 }} />
           <div>
             <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>Tax payable</div>
-            <div style={{ fontFamily: 'Geist Mono,monospace', fontSize: 24, fontWeight: 700, color: '#fff', marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>{fmtINR(winnerData.tax)}</div>
+            <div className="winner-metric-val" style={{ fontFamily: 'Geist Mono,monospace', fontSize: 24, fontWeight: 700, color: '#fff', marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>{fmtINR(winnerData.tax)}</div>
             <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginTop: 2 }}>this year</div>
           </div>
         </div>
