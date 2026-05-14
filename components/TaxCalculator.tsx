@@ -98,7 +98,7 @@ export function TaxCalculator() {
       // scroll to results
       setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Calculation failed. Is the backend running?');
+      setError(e instanceof Error ? e.message : 'Calculation failed. Please try again.');
     } finally {
       setLoading(false);
     }

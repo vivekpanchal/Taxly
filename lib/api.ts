@@ -111,11 +111,16 @@ export interface CalculateResult {
 // ── API call ──────────────────────────────────────────────────────────────────
 
 export async function calculate(input: CalculateInput): Promise<CalculateResult> {
-  const res = await fetch(`${API_BASE}/api/calculate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(input),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}/api/calculate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+  } catch {
+    throw new Error(`Cannot reach the API server (${API_BASE}). Check that NEXT_PUBLIC_API_URL is set correctly and the backend is running.`);
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Unknown error' }));
     throw new Error(err.error || `HTTP ${res.status}`);
